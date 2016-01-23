@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+arch = case RUBY_PLATFORM
+  when /64.*linux/
+    'linux-amd64'
+  when /linux/
+    'linux-x86'
+  when /64.*darwin/
+    'darwin-amd64'
+  when /darwin/
+    'darwin-x86'
+  else
+    raise "Windows not yet supported"
+end
+
+args = $*.map { |x| x.include?(' ') ? "'" + x + "'" : x }
+cmd = File.expand_path "#{File.dirname(__FILE__)}/../libexec/vault-#{arch}"
+
+exec "#{cmd} #{args.join(' ')}"
