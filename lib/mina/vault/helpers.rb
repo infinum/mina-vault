@@ -10,12 +10,12 @@ private
 
 def method_options
   return mina_vault_auth_options unless mina_vault_auth_options.nil?
-  die('mina_vault_token is not set') if mina_vault_token.nil?
+  die('mina_vault_auth_token is not set') if mina_vault_auth_token.nil?
   case mina_vault_auth_method
   when 'token'
-    " #{mina_vault_token}"
+    " #{mina_vault_auth_token}"
   when 'github'
-    " -method=github token=#{mina_vault_token}"
+    " -method=github token=#{mina_vault_auth_token}"
   end
 end
 

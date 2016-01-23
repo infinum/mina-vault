@@ -2,7 +2,7 @@ require 'mina/bundler'
 require 'mina/rails'
 
 # Any and all of these settings can be overriden in your `deploy.rb`.
-set_default :mina_vault_token, -> { ENV['MINA_VAULT_TOKEN'] }
+set_default :mina_vault_auth_token, -> { ENV['MINA_VAULT_AUTH_TOKEN'] }
 set_default :mina_vault_auth_method, -> { ENV['MINA_VAULT_AUTH_METHOD'] || 'token' }
 set_default :mina_vault_secrets_field, -> { 'secrets' }
 # mina_vault_auth_options
