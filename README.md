@@ -1,60 +1,48 @@
 # Modules: Vault
 
-Mina plugin to manage vaults
+Mina plugin to work with [vault](https://vaultproject.io)
 
-## Installation
+## Installing
 
-Add this line to your application's Gemfile:
+    gem install mina-vault
 
-```ruby
-gem 'mina-vault', require: false
-```
+Or add to Gemfile
 
-And then execute:
+    gem 'mina-vault', require: false
 
-    $ bundle
 
-Or install it yourself as:
+## Using
 
-    $ gem install mina-vault
+### Variables to override:
 
-## Usage
+    mina_vault_auth_token    # default: ENV['MINA_VAULT_AUTH_TOKEN']
+    mina_vault_auth_method   # default: ENV['MINA_VAULT_AUTH_METHOD'] || 'token'
+    mina_vault_secrets_field # default: 'secrets'
+    mina_vault_auth_options  # this will override aith_token and auth_method
+    mina_vault_repo          # if not set, will use git repo name
+    mina_vault_secrets_file  # this is mandatory
+    mina_vault_secrets_key   # mandatory (Example 'rails/staging/repo')
 
-### Settings
-Any and all of these settings can be overriden in your `deploy.rb`.
+### Deploying
 
-Sets the path to vault.
+Locally set:
+get github token with repo:org permissions
+set MINA_VAULT_AUTH_TOKEN=github_token
+set MINA_VAULT_AUTH_METHOD=github
 
-    set_default :vault, lambda { "bin/vault" }
+### Using with CI
 
-Sets the dir to the pid files of a vault workers
+set VAULT_TOKEN environment
+set VAULT_ADDR environment
 
-    set_default :vault_pid_dir, lambda { "#{deploy_to}/#{shared_path}/pids" }
+On BUILD: Add before bundle install:
 
-Sets the number of vault processes launched
+    gem install vault-binaries
+    vault read -field=#{secrets_field} #{secrets_key} > #{secrets_file}
 
-    set_default :vault_processes, 1
+On DEPLOY:
 
-### Usage example
-
-    require 'mina/vault'
-    ...
-    task :setup do
-      # vault needs a place to store its pid file
-      invoke :'vault:setup'
-    end
-
-    task :deploy do
-      deploy do
-        invoke :'git:clone'
-        ...
-
-        to :launch do
-          ...
-          invoke :'vault:restart'
-        end
-      end
-    end
+    mina staging deploy MINA_VAULT_AUTH_TOKEN=$VAULT_TOKEN
 
 ## Contributing
 
